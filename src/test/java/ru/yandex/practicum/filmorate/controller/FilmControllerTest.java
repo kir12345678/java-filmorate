@@ -13,7 +13,7 @@ public class FilmControllerTest {
     private final FilmController filmController = new FilmController();
 
     @Test
-    void testCreate() {
+    void createFilm() {
 
         Film film = new Film();
         film.setName("FilmName");
@@ -25,4 +25,5 @@ public class FilmControllerTest {
         assertEquals(1, result.getId(), "IDs don't equal");
 
     }
+
 }
