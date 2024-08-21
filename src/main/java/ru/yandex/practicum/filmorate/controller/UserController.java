@@ -12,7 +12,7 @@ import java.util.Collection;
 @RestController
 @RequestMapping("/users")
 public class UserController {
-    UserStorage userStorage=new UserStorage();
+    UserStorage userStorage = new UserStorage();
 
     @PostMapping
     public User create(@RequestBody @Valid User user) {
