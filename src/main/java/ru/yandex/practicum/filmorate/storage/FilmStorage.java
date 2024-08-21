@@ -1,6 +1,7 @@
 package ru.yandex.practicum.filmorate.storage;
 
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
+import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
 
 import java.util.*;
@@ -25,6 +26,9 @@ public class FilmStorage {
     }
 
     public Collection<Film> getAll() {
+        if (films.isEmpty()) {
+            throw new ValidationException("Список пуст.");
+        }
         return films.values();
     }
 }
