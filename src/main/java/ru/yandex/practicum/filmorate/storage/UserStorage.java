@@ -25,8 +25,8 @@ public class UserStorage {
         return user;
     }
 
-    public Collection<User> getAll() {
-        return users.values();
+    public List<User> getAll() {
+        return new ArrayList<>(users.values());
     }
 
 }

@@ -11,6 +11,7 @@ import ru.yandex.practicum.filmorate.storage.UserStorage;
 
 import java.time.LocalDate;
 import java.util.Collection;
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -31,6 +32,7 @@ public class UserController {
         if (user.getBirthday() != null && user.getBirthday().isAfter(LocalDate.now())) {
             throw new ValidationException("Дата рождения не может быть в будущем");
         }
+
     }
 
     @PostMapping
@@ -43,14 +45,20 @@ public class UserController {
 
     @PutMapping("/{id}")
     public User update(@PathVariable int id, @RequestBody @Valid User user) throws NotFoundException {
+        validateUser(user);
         log.info("User updated: {}", user);
         return userStorage.update(id, user);
     }
 
     @GetMapping
     public Collection<User> getAll() {
+        List<User> users = userStorage.getAll();
+        if (users.isEmpty()) {
+            log.info("Nor users");
+            throw new ValidationException("Not Users");
+        }
         log.info("All users");
-        return userStorage.getAll();
+        return users;
     }
 }
 

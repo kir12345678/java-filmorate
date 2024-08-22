@@ -14,7 +14,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Slf4j
-@Validated
+//@Validated
 @RestController
 @RequestMapping("/films")
 public class FilmController {
