@@ -25,10 +25,8 @@ public class FilmStorage {
         return film;
     }
 
-    public Collection<Film> getAll() {
-        if (films.isEmpty()) {
-            throw new ValidationException("Список пуст.");
-        }
-        return films.values();
+    public List<Film> getAll() {
+       return new ArrayList<>(films.values());
     }
+
 }

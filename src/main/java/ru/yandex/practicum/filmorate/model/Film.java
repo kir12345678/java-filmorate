@@ -20,9 +20,11 @@ public class Film {
 
     @Size(max = 200, message = "Максимальная длина описания — 200 символов!")
     private String description;
+
     @DateTimeFormat(pattern = "dd.MM.yyyy")
     //@MinimumDate
     LocalDate releaseDate;
+
     @Min(value = 0, message = "Продолжительность фильма должна быть положительной!")
     Duration duration;
 }

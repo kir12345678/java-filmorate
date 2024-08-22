@@ -3,6 +3,7 @@ package ru.yandex.practicum.filmorate.controller;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
@@ -11,8 +12,10 @@ import ru.yandex.practicum.filmorate.storage.FilmStorage;
 
 import java.time.LocalDate;
 import java.util.Collection;
+import java.util.List;
 
 @Slf4j
+@Validated
 @RestController
 @RequestMapping("/films")
 public class FilmController {
@@ -39,7 +42,7 @@ public class FilmController {
     @ResponseStatus(HttpStatus.CREATED)
     public Film create(@RequestBody  @Valid Film film) {
         log.info("New film created: {}", film);
-        //validateFilm(film);
+        validateFilm(film);
         return filmStorage.create(film);
     }
 
@@ -51,8 +54,12 @@ public class FilmController {
     }
 
     @GetMapping
-    public Collection<Film> getAll() {
-        log.info("All films");
-        return filmStorage.getAll();
+    public List<Film> getAll() throws NotFoundException {
+        List<Film> films = filmStorage.getAll();
+        if (films.isEmpty()) {
+            log.warn("Запрос на получение всех фильмов, но список фильмов пуст.");
+            throw new NotFoundException("Нет доступных фильмов.");
+        }
+        return films;
     }
 }
