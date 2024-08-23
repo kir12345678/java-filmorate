@@ -1,8 +1,6 @@
 package ru.yandex.practicum.filmorate.controller;
 
-import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
@@ -13,7 +11,6 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Slf4j
-//@Validated
 @RestController
 @RequestMapping("/films")
 public class FilmController {
@@ -30,25 +27,23 @@ public class FilmController {
         if (film.getReleaseDate() != null && film.getReleaseDate().isBefore(LocalDate.of(1895, 12, 28))) {
             throw new ValidationException("Дата релиза не может быть раньше 28 декабря 1895 года");
         }
-        if (film.getDuration().toMinutes() <= 0) {
+        if (film.getDuration() <= 0) {
             throw new ValidationException("Продолжительность фильма должна быть положительной!");
         }
-
     }
 
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public Film create(@RequestBody  @Valid Film film) {
+    public Film create(@RequestBody  Film film) {
         log.info("New film created: {}", film);
         validateFilm(film);
         return filmStorage.create(film);
     }
 
-    @PutMapping("/{id}")
-    public Film update(@PathVariable int id, @RequestBody @Valid Film film) throws NotFoundException {
+    @PutMapping
+    public Film update(@RequestBody Film film) throws NotFoundException {
         log.info("Film updated: {}", film);
         validateFilm(film);
-        return filmStorage.update(id, film);
+        return filmStorage.update(film);
     }
 
     @GetMapping

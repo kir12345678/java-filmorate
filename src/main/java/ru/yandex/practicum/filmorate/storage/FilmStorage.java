@@ -15,11 +15,11 @@ public class FilmStorage {
         return film;
     }
 
-    public Film update(int id, Film film) throws NotFoundException {
+    public Film update(Film film) throws NotFoundException {
+        int id = film.getId();
         if (!films.containsKey(id)) {
             throw new NotFoundException("Film with id " + id + " not found");
         }
-        film.setId(id);
         films.put(id, film);
         return film;
     }

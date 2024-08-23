@@ -1,8 +1,5 @@
-
 package ru.yandex.practicum.filmorate.controller;
-import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
@@ -10,7 +7,6 @@ import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.storage.UserStorage;
 
 import java.time.LocalDate;
-import java.util.Collection;
 import java.util.List;
 
 @Slf4j
@@ -36,22 +32,21 @@ public class UserController {
     }
 
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public User create(@RequestBody @Valid User user) {
+    public User create(@RequestBody User user) {
         validateUser(user);
         log.info("New user created: {}", user);
         return userStorage.create(user);
     }
 
-    @PutMapping("/{id}")
-    public User update(@PathVariable int id, @RequestBody @Valid User user) throws NotFoundException {
+    @PutMapping
+    public User update(@RequestBody User user) throws NotFoundException {
         validateUser(user);
         log.info("User updated: {}", user);
-        return userStorage.update(id, user);
+        return userStorage.update(user);
     }
 
     @GetMapping
-    public Collection<User> getAll() {
+    public List<User> getAll() {
         List<User> users = userStorage.getAll();
         if (users.isEmpty()) {
             log.info("Nor users");

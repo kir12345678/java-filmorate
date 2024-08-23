@@ -1,5 +1,4 @@
 package ru.yandex.practicum.filmorate.storage;
-
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.model.User;
 
@@ -16,11 +15,11 @@ public class UserStorage {
         return user;
     }
 
-    public User update(int id, User user) throws NotFoundException {
+    public User update(User user) throws NotFoundException {
+        int id = user.getId();
         if (!users.containsKey(id)) {
             throw new NotFoundException("Film with id " + id + " not found");
         }
-        user.setId(id);
         users.put(id, user);
         return user;
     }

@@ -7,9 +7,16 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @RestControllerAdvice
 public class ErrorHandler {
+
     @ExceptionHandler(ValidationException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorResponse handleVaidationExeption(final ValidationException e) {
-        return new ErrorResponse(String.format("Ошибка валидации", e.getMessage()));
+    public ErrorResponse handleValidationException(final ValidationException e) {
+        return new ErrorResponse("Ошибка валидации" + e.getMessage());
+    }
+
+    @ExceptionHandler(NotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ErrorResponse handleNotFoundException(final NotFoundException e) {
+        return new ErrorResponse("Ошибка валидации" + e.getMessage());
     }
 }

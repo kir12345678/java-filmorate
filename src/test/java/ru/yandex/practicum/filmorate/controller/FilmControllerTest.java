@@ -18,7 +18,7 @@ public class FilmControllerTest {
         Film film = new Film();
         film.setName("FilmName");
         film.setDescription("My Film Description");
-        film.setDuration(Duration.ofMinutes(90));
+        film.setDuration(90);
         film.setReleaseDate(LocalDate.parse("21.08.2024", DateTimeFormatter.ofPattern("dd.MM.yyyy")));
 
         Film result = filmController.create(film);
