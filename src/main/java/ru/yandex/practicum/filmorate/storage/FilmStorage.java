@@ -5,27 +5,16 @@ import ru.yandex.practicum.filmorate.model.Film;
 import java.util.*;
 
 
-public class FilmStorage {
-    private final Map<Integer, Film> films = new HashMap<>();
-    private int filmId = 1;
+public interface FilmStorage {
 
-    public Film create(Film film) {
-        film.setId(filmId++);
-        films.put(film.getId(), film);
-        return film;
-    }
+    Film create(Film film);
 
-    public Film update(Film film) throws NotFoundException {
-        int id = film.getId();
-        if (!films.containsKey(id)) {
-            throw new NotFoundException("Film with id " + id + " not found");
-        }
-        films.put(id, film);
-        return film;
-    }
+    Film update(Film film) throws NotFoundException;
 
-    public List<Film> getAll() {
-       return new ArrayList<>(films.values());
-    }
+    List<Film> getAll();
+
+    Film find(Integer id) throws NotFoundException;
+
+    boolean delete(Integer id);
 
 }
