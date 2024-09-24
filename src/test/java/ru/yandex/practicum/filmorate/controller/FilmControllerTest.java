@@ -1,7 +1,13 @@
 package ru.yandex.practicum.filmorate.controller;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.service.FilmService;
+
+import ru.yandex.practicum.filmorate.storage.InMemoryFilmStorage;
+import ru.yandex.practicum.filmorate.storage.InMemoryUserStorage;
+
 
 
 import java.time.LocalDate;
@@ -11,11 +17,15 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class FilmControllerTest {
 
-    FilmController filmController;
+    private FilmService filmService;
+    private FilmController filmController;
 
-    @Autowired
-    public FilmControllerTest(FilmController filmController) {
-        this.filmController = filmController;
+    @BeforeEach
+    public void setUp() {
+        InMemoryFilmStorage inMemoryFilmStorage = new InMemoryFilmStorage();
+        InMemoryUserStorage inMemoryUserStorage = new InMemoryUserStorage();
+        filmService = new FilmService(inMemoryFilmStorage, inMemoryUserStorage);
+        filmController = new FilmController(filmService);
     }
 
     @Test
