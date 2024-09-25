@@ -12,6 +12,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+
 @Service
 public class UserService {
     private final UserStorage userStorage;
@@ -41,6 +42,7 @@ public class UserService {
         User friend = userStorage.find(friendId);
 
         user.addFriend(friendId);
+        friend.addFriend(id);
         return userStorage.update(user);
     }
 
@@ -75,5 +77,5 @@ public class UserService {
             userFriends.add(userStorage.find(userId));
         }
         return userFriends;
-    }
+   }
 }
