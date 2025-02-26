@@ -54,7 +54,7 @@ public class UserDbStorage implements UserStorage {
 
     @Override
     public List<User> getAll() {
-        String sql = "select * from USERS";
+        String sql = "select * from users";
 
         return jdbcTemplate.query(sql, (rs, rowNum) -> makeUser(rs));
     }
@@ -105,10 +105,10 @@ public class UserDbStorage implements UserStorage {
 
     @Override
     public boolean delete(Integer id) {
-        String sqlQuery = "delete from MPA where id = ?";
+        String sqlQuery = "delete from mpa where id = ?";
         jdbcTemplate.update(sqlQuery, id);
 
-        sqlQuery = "delete from MPA where id = ?";
+        sqlQuery = "delete from mpa where id = ?";
         return jdbcTemplate.update(sqlQuery, id) > 0;
     }
 
@@ -119,7 +119,7 @@ public class UserDbStorage implements UserStorage {
         String login = rs.getString("login");
         LocalDate birthday = rs.getDate("birthday").toLocalDate();
 
-        String friendsSql = "select * from FRIENDSHIP where user_id = ?";
+        String friendsSql = "select * from friendship where user_id = ?";
         List<Integer> friendsCollection = jdbcTemplate.query(friendsSql, (rs1, rowNum) -> makeUserFriend(rs1), id);
 
         return new User(id, name, email, login, birthday, new HashSet<Integer>(friendsCollection));

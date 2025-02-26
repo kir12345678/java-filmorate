@@ -27,7 +27,7 @@ public class FilmDbStorage implements FilmStorage {
 
     @Override
     public Film create(Film film) {
-        String sql = "INSERT INTO FILM (name, description, release_date, duration, mpa_id) " +
+        String sql = "INSERT INTO film (name, description, release_date, duration, mpa_id) " +
                 "VALUES (:name, :description, :releaseDate, :duration, :mpaId)";
 
         MapSqlParameterSource params = new MapSqlParameterSource()
@@ -52,8 +52,8 @@ public class FilmDbStorage implements FilmStorage {
                 select f.id id, f.name name,f.description description,
                 f.mpa_id mpa_id, m.name as mpa_name,
                 f.release_date release_date, f.duration as duration
-                from FILM f
-                JOIN MPA m ON m.id = f.mpa_id""";
+                from film f
+                JOIN mpa m ON m.id = f.mpa_id""";
 
         return jdbcTemplate.query(sql, (rs, rowNum) -> makeFilm(rs));
     }
@@ -63,8 +63,8 @@ public class FilmDbStorage implements FilmStorage {
         String sql = "select f.id id, f.name name,f.description description,\n" +
                 "f.mpa_id mpa_id, m.name as mpa_name,\n" +
                 "f.release_date release_date, f.duration as duration\n" +
-                "from FILM f\n" +
-                "JOIN MPA m ON m.id = f.mpa_id\n" +
+                "from film f\n" +
+                "JOIN mpa m ON m.id = f.mpa_id\n" +
                 "where f.id = ?";
 
         List<Film> filmCollection = jdbcTemplate.query(sql, (rs, rowNum) -> makeFilm(rs), id);
@@ -92,12 +92,12 @@ public class FilmDbStorage implements FilmStorage {
         Integer duration = rs.getInt("duration");
 
         String genreSql = "select g.* \n" +
-                "from FILM_GENRE f\n" +
-                "JOIN GENRE g ON (f.genre_id = g.id)\n" +
+                "from film_genre f\n" +
+                "JOIN genre g ON (f.genre_id = g.id)\n" +
                 "where film_id = ?";
         List<Genre> genreCollection = jdbcTemplate.query(genreSql, (rs1, rowNum) -> makeFilmsGenre(rs1), id);
 
-        String likesSql = "select * from FILM_LIKE where film_id = ?";
+        String likesSql = "select * from film_like where film_id = ?";
         List<Integer> usersCollection = jdbcTemplate.query(likesSql, (rs1, rowNum) -> makeFilmsLike(rs1), id);
 
         return new Film(id, name, description, releaseDate, duration, new HashSet<>(usersCollection),

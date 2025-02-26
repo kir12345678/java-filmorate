@@ -1,4 +1,4 @@
-MERGE INTO MPA KEY(ID)
+MERGE INTO mpa KEY(ID)
 VALUES (1,'G'),
 (2,'PG'),
 (3,'PG-13'),
