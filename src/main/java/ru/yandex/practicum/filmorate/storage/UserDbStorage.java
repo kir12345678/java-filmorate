@@ -54,7 +54,7 @@ public class UserDbStorage implements UserStorage {
 
     @Override
     public List<User> getAll() {
-        String sql = "select * from users";
+        String sql = "select * from USERS";
 
         return jdbcTemplate.query(sql, (rs, rowNum) -> makeUser(rs));
     }
