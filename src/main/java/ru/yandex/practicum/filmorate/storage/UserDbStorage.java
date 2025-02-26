@@ -63,7 +63,7 @@ public class UserDbStorage implements UserStorage {
     public User update(User user) throws NotFoundException {
         find(user.getId());
 
-        String sqlQuery = "update user set " +
+        String sqlQuery = "update users set " +
                 "name = ?, login = ?, email = ?, birthday = ? " +
                 "where id = ?";
         jdbcTemplate.update(sqlQuery,
@@ -92,7 +92,7 @@ public class UserDbStorage implements UserStorage {
     @Override
     public User find(Integer id) throws NotFoundException {
 
-        String sql = "select * from user where id = ?";
+        String sql = "select * from users where id = ?";
 
         List<User> userCollection = jdbcTemplate.query(sql, (rs, rowNum) -> makeUser(rs), id);
         if (userCollection.size() == 1) {
@@ -105,10 +105,10 @@ public class UserDbStorage implements UserStorage {
 
     @Override
     public boolean delete(Integer id) {
-        String sqlQuery = "delete from mpa where id = ?";
+        String sqlQuery = "delete from MPA where id = ?";
         jdbcTemplate.update(sqlQuery, id);
 
-        sqlQuery = "delete from mpa where id = ?";
+        sqlQuery = "delete from MPA where id = ?";
         return jdbcTemplate.update(sqlQuery, id) > 0;
     }
 
@@ -119,7 +119,7 @@ public class UserDbStorage implements UserStorage {
         String login = rs.getString("login");
         LocalDate birthday = rs.getDate("birthday").toLocalDate();
 
-        String friendsSql = "select * from friendship where user_id = ?";
+        String friendsSql = "select * from FRIENDSHIP where user_id = ?";
         List<Integer> friendsCollection = jdbcTemplate.query(friendsSql, (rs1, rowNum) -> makeUserFriend(rs1), id);
 
         return new User(id, name, email, login, birthday, new HashSet<Integer>(friendsCollection));

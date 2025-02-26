@@ -24,13 +24,13 @@ public class MpaDbStorage implements MpaStorage {
 
     @Override
     public List<Mpa> findAll() {
-        String sql = "select * from mpa order by id";
+        String sql = "select * from MPA order by id";
         return jdbcTemplate.query(sql, (rs, rowNum) -> makeFilmsMpa(rs));
     }
 
     @Override
     public Mpa find(Integer id) throws NotFoundException {
-        String sql = "select * from mpa where id = ?";
+        String sql = "select * from MPA where id = ?";
 
         List<Mpa> mpaCollection = jdbcTemplate.query(sql, (rs, rowNum) -> makeFilmsMpa(rs), id);
         if (mpaCollection.size() == 1) {
@@ -43,12 +43,12 @@ public class MpaDbStorage implements MpaStorage {
 
     @Override
     public boolean delete(Integer id) {
-        String sqlQuery = "update film set " +
+        String sqlQuery = "update FILM set " +
                 "mpa_id = null " +
                 "where mpa_id = ?";
         jdbcTemplate.update(sqlQuery, id);
 
-        sqlQuery = "delete from mpa where id = ?";
+        sqlQuery = "delete from MPA where id = ?";
         return jdbcTemplate.update(sqlQuery, id) > 0;
     }
 

@@ -23,13 +23,13 @@ public class GenreDbStorage implements GenreStorage {
 
     @Override
     public List<Genre> findAll() {
-        String sql = "select * from genres order by id";
+        String sql = "select * from GENRE order by id";
         return jdbcTemplate.query(sql, (rs, rowNum) -> makeFilmsGenre(rs));
     }
 
     @Override
     public Genre find(Integer id) throws NotFoundException {
-        String sql = "select * from genres where id = ?";
+        String sql = "select * from GENRE where id = ?";
 
         List<Genre> genreCollection = jdbcTemplate.query(sql, (rs, rowNum) -> makeFilmsGenre(rs), id);
         if (genreCollection.size() == 1) {
@@ -42,10 +42,10 @@ public class GenreDbStorage implements GenreStorage {
 
     @Override
     public boolean delete(Integer id) {
-        String sqlQuery = "delete from friendships where user_id = ? or friend_id = ?";
+        String sqlQuery = "delete from FRIENDSHIP where user_id = ? or friend_id = ?";
         jdbcTemplate.update(sqlQuery, id);
 
-        sqlQuery = "delete from genres where id = ?";
+        sqlQuery = "delete from GENRE where id = ?";
         return jdbcTemplate.update(sqlQuery, id) > 0;
     }
 
