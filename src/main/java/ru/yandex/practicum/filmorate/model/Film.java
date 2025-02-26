@@ -20,14 +20,14 @@ public class Film {
 
 
     public Film(int id, String name, String description, LocalDate releaseDate, int duration, Set<Integer> likes, Mpa mpa, Set<Genre> genres) {
-        this.id=id;
-        this.name=name;
+        this.id = id;
+        this.name = name;
         this.description = description;
         this.releaseDate = releaseDate;
         this.duration = duration;
         this.likes = likes;
         this.mpa = mpa;
-        this.genres=genres;
+        this.genres = genres;
     }
 
 }
