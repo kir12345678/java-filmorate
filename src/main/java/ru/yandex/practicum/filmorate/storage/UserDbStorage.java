@@ -49,6 +49,7 @@ public class UserDbStorage implements UserStorage {
                 .usingGeneratedKeyColumns("id");
 
         return find(simpleJdbcInsert.executeAndReturnKey(values).intValue());
+
     }
 
     @Override

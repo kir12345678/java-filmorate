@@ -8,8 +8,7 @@ DROP TABLE IF EXISTS MPA;
 
 CREATE TABLE mpa (
     id INTEGER PRIMARY KEY,
-    name varchar,
-    desc VARCHAR
+    name VARCHAR
 );
 
 CREATE TABLE film (

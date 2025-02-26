@@ -55,8 +55,8 @@ public class MpaDbStorage implements MpaStorage {
     private Mpa makeFilmsMpa(ResultSet rs) throws SQLException {
         Integer mpaId = rs.getInt("id");
         String mpaName = rs.getString("name");
-        String mpaDescription = rs.getString("description");
-        return new Mpa(mpaId, mpaName, mpaDescription);
+
+        return new Mpa(mpaId, mpaName);
     }
 
 
