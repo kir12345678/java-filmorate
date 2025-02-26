@@ -21,7 +21,7 @@ public class UserService {
         this.userStorage = userStorage;
     }
 
-    public User create(User user) {
+    public User create(User user) throws NotFoundException {
         return userStorage.create(user);
     }
 

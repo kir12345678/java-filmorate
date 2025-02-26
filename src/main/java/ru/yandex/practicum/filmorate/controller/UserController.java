@@ -40,7 +40,7 @@ public class UserController {
     }
 
     @PostMapping
-    public User create(@Valid @RequestBody User user) {
+    public User create(@Valid @RequestBody User user) throws NotFoundException {
         validateUser(user);
         log.info("New user created: {}", user);
         return userService.create(user);
