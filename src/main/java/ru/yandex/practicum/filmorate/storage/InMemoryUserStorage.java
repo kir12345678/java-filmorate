@@ -49,7 +49,7 @@ public class InMemoryUserStorage implements UserStorage {
     }
 
     @Override
-    public boolean delete(Integer id){
+    public boolean delete(Integer id) {
       return  false;
     }
 
