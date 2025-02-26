@@ -29,7 +29,7 @@ CREATE TABLE genre (
 CREATE TABLE "USER" (
     id INTEGER PRIMARY KEY,
     birthday DATE,
-    email VARCHAR,
+    email VARCHAR NOT NULL,
     login VARCHAR
 );
 
