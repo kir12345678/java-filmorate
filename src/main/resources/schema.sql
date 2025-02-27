@@ -29,14 +29,14 @@ CREATE TABLE genre (
 CREATE TABLE users (
     id INTEGER PRIMARY KEY,
     birthday DATE,
-    email VARCHAR NOT NULL,
-    login VARCHAR NOT NULL
+    email VARCHAR NOT NULL UNIQUE,
+    login VARCHAR NOT NULL UNIQUE
 );
 
 CREATE TABLE likes (
     id INTEGER PRIMARY KEY,
-    film_id INTEGER,
-    user_id INTEGER,
+    film_id INTEGER NOT NULL,
+    user_id INTEGER NOT NULL,
     FOREIGN KEY (film_id) REFERENCES film(id),
     FOREIGN KEY (user_id) REFERENCES users(id)
 );
