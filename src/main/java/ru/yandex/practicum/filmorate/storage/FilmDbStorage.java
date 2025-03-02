@@ -81,11 +81,11 @@ public class FilmDbStorage implements FilmStorage {
     @Override
     public List<Film> getAll() {
         String sql = """
-                select 
+                select
                   f.id id, f.name name,f.description description,
                   f.mpa_id mpa_id, m.name as mpa_name,
                   f.release_date release_date, f.duration as duration
-                from 
+                from
                    film f JOIN mpa m ON m.id = f.mpa_id""";
 
         return jdbcTemplate.query(sql, (rs, rowNum) -> makeFilm(rs));
