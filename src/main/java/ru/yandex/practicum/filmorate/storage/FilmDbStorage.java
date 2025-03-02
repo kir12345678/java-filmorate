@@ -1,0 +1,152 @@
+package ru.yandex.practicum.filmorate.storage;
+
+
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
+
+import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
+import org.springframework.stereotype.Repository;
+import ru.yandex.practicum.filmorate.exception.NotFoundException;
+import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.model.Genre;
+import ru.yandex.practicum.filmorate.model.Mpa;
+
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.time.LocalDate;
+import java.util.*;
+
+
+@Repository
+@Slf4j
+public class FilmDbStorage implements FilmStorage {
+
+    private final JdbcTemplate jdbcTemplate;
+
+    @Autowired
+    public FilmDbStorage(JdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
+    }
+
+    @Override
+    public Film create(Film film) throws NotFoundException {
+        /*String sql = "INSERT INTO film (name, description, release_date, duration, mpa_id) " +
+                "VALUES (:name, :description, :releaseDate, :duration, :mpaId)";
+
+        MapSqlParameterSource params = new MapSqlParameterSource()
+                .addValue("name", film.getName())
+                .addValue("description", film.getDescription())
+                .addValue("releaseDate", film.getReleaseDate())
+                .addValue("duration", film.getDuration())
+                .addValue("mpaId", film.getMpa().getId());
+
+        jdbcTemplate.update(sql, params);
+
+
+        return film;*/
+
+        Map<String, Object> values = new HashMap<>();
+        values.put("name", film.getName());
+        values.put("description", film.getDescription());
+        values.put("mpa_id", film.getMpa().getId());
+        values.put("release_date", film.getReleaseDate());
+        values.put("duration", film.getDuration());
+
+        SimpleJdbcInsert simpleJdbcInsert = new SimpleJdbcInsert(jdbcTemplate)
+                .withTableName("films")
+                .usingGeneratedKeyColumns("id");
+
+        Integer filmId = simpleJdbcInsert.executeAndReturnKey(values).intValue();
+        if (film.getGenres() != null) {
+            for (Genre genre : film.getGenres()) {
+                log.info(filmId.toString() + '-' + genre.getId().toString());
+                String sqlQuery = "insert into films_genres(film_id, genre_id) " +
+                        "values (?, ?)";
+                jdbcTemplate.update(sqlQuery,
+                        filmId,
+                        genre.getId());
+            }
+        }
+        return find(filmId);
+
+    }
+
+    @Override
+    public Film update(Film film) throws NotFoundException {
+        return null;
+    }
+
+    @Override
+    public List<Film> getAll() {
+        String sql = """
+                select
+                  f.id id, f.name name,f.description description,
+                  f.mpa_id mpa_id, m.name as mpa_name,
+                  f.release_date release_date, f.duration as duration
+                from
+                   film f JOIN mpa m ON m.id = f.mpa_id""";
+
+        return jdbcTemplate.query(sql, (rs, rowNum) -> makeFilm(rs));
+    }
+
+    @Override
+    public Film find(Integer id) throws NotFoundException {
+        String sql = """
+                 select f.id id, f.name name,f.description description,
+                  f.mpa_id mpa_id, m.name as mpa_name,
+                  f.release_date release_date, f.duration as duration
+                 from film f
+                   JOIN mpa m ON m.id = f.mpa_id
+                 where f.id = ?""";
+
+        List<Film> filmCollection = jdbcTemplate.query(sql, (rs, rowNum) -> makeFilm(rs), id);
+        if (filmCollection.size() == 1) {
+            return filmCollection.get(0);
+        } else {
+            log.info("фильм не найден с ID - {}", id);
+            throw new NotFoundException(String.format("Фильма с id-%d не существует.", id));
+        }
+    }
+
+    @Override
+    public boolean delete(Integer id) {
+        return false;
+    }
+
+    private Film makeFilm(ResultSet rs) throws SQLException {
+
+        Integer id = rs.getInt("id");
+        String name = rs.getString("name");
+        String description = rs.getString("description");
+        Integer mpaId = rs.getInt("mpa_id");
+        String mpaName = rs.getString("mpa_name");
+        LocalDate releaseDate = rs.getDate("release_date").toLocalDate();
+        Integer duration = rs.getInt("duration");
+
+        String genreSql = "select g.* \n" +
+                "from film_genre f\n" +
+                "JOIN genre g ON (f.genre_id = g.id)\n" +
+                "where film_id = ?";
+        List<Genre> genreCollection = jdbcTemplate.query(genreSql, (rs1, rowNum) -> makeFilmsGenre(rs1), id);
+
+        String likesSql = "select * from film_like where film_id = ?";
+        List<Integer> usersCollection = jdbcTemplate.query(likesSql, (rs1, rowNum) -> makeFilmsLike(rs1), id);
+
+        return new Film(id, name, description, releaseDate, duration, new HashSet<>(usersCollection),
+                new Mpa(mpaId, mpaName), new HashSet<>(genreCollection));
+    }
+
+    private Genre makeFilmsGenre(ResultSet rs) throws SQLException {
+        Integer genreId = rs.getInt("id");
+        String genreName = rs.getString("name");
+        return new Genre(genreId, genreName);
+    }
+
+    private Integer makeFilmsLike(ResultSet rs) throws SQLException {
+        Integer userId = rs.getInt("user_id");
+        return userId;
+    }
+}
+

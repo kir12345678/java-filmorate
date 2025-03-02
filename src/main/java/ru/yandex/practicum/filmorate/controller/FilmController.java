@@ -36,11 +36,14 @@ public class FilmController {
         if (film.getDuration() <= 0) {
             throw new ValidationException("Продолжительность фильма должна быть положительной!");
         }
+        if (film.getMpa() == null) {
+            throw new IllegalArgumentException("Mpa cannot be null");
+        }
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Film create(@Valid @RequestBody  Film film) {
+    public Film create(@Valid @RequestBody  Film film) throws NotFoundException {
         log.info("New film created: {}", film);
         validateFilm(film);
         return filmService.create(film);

@@ -47,4 +47,10 @@ public class InMemoryUserStorage implements UserStorage {
             throw new NotFoundException(String.format("Пользователя с id-\"%d\" не существует.", id));
         }
     }
+
+    @Override
+    public boolean delete(Integer id) {
+      return  false;
+    }
+
 }
