@@ -24,7 +24,7 @@ public class FilmService {
         this.userStorage = userStorage;
     }
 
-    public Film create(Film film) {
+    public Film create(Film film) throws NotFoundException {
         return filmStorage.create(film);
     }
 

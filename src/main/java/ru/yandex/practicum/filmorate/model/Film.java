@@ -1,5 +1,7 @@
 package ru.yandex.practicum.filmorate.model;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.Data;
 import java.time.LocalDate;
 import java.util.HashSet;
@@ -13,12 +15,14 @@ public class Film {
     private int id;
     @NotBlank
     private String name;
+    @NotNull
+    @Size(max = 200)
     private String description;
     LocalDate releaseDate;
     int duration;
     private Set<Integer> likes = new HashSet<>();
     private Mpa mpa;
-    private Set<Genre> genres = new HashSet<>();
+    private Set<Genre> genres = new HashSet<>();;
 
 
     public Film(int id, String name, String description, LocalDate releaseDate, int duration, Set<Integer> likes, Mpa mpa, Set<Genre> genres) {
@@ -32,4 +36,7 @@ public class Film {
         this.genres = genres;
     }
 
+    public void setId(int longValue) {
+        this.id = longValue;
+    }
 }

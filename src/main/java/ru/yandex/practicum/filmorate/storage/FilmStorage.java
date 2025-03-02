@@ -7,7 +7,7 @@ import java.util.*;
 
 public interface FilmStorage {
 
-    Film create(Film film);
+    Film create(Film film) throws NotFoundException;
 
     Film update(Film film) throws NotFoundException;
 
